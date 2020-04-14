@@ -5,6 +5,9 @@
 
 namespace kfw {
     namespace core {
+        #define PATCHTYPE_ADDRESS 0x0
+        #define PATCHTYPE_PATTERN 0x1
+
         struct HookData {
             std::string identifier;
             std::string hrIdentifier;
@@ -61,6 +64,28 @@ namespace kfw {
             static DWORD64 findPattern(const DWORD64 addrFrom, const DWORD64 addrTo, const char* pattern, const char* mask);
             static DWORD64 findPattern(const HMODULE module, const char* pattern, const char* mask);
             static DWORD64 findPattern(const char* module, const char* pattern, const char* mask);
+        };
+    
+        class PatchInfo {
+        private:
+            bool patchPattern();
+            bool patchAddress();
+            char* oldBytes;
+            int type = 0;
+        public:
+            DWORD64 address = 0;
+            bool patched = false;
+            char* pattern;
+            char* mask;
+            char* module;
+            char* name;
+            char* toWrite;
+            bool prefetchAddress();
+            bool patch();
+            bool unpatch();
+
+            PatchInfo(DWORD64 address, const char* toWrite, const char* name);
+            PatchInfo(const char* module, const char* pattern, const char* mask, const char* toWrite, const char* name);
         };
     }
 }

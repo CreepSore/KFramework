@@ -150,6 +150,7 @@
     <ClCompile Include="Hooking.cpp" />
     <ClCompile Include="k-framework.cpp" />
     <ClCompile Include="Logger.cpp" />
+    <ClCompile Include="Patcher.cpp" />
     <ClCompile Include="Utils.cpp" />
   </ItemGroup>
   <ItemGroup>
