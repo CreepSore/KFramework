@@ -5,6 +5,8 @@ VisualStudioVersion = 16.0.30002.166
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "k-framework", "Projects\k-framework\k-framework.vcxproj", "{A303C8C5-D572-445C-922D-191019579269}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "KFwTestApp", "Projects\KFwTestApp\KFwTestApp.vcxproj", "{157CD4B2-98C7-440D-9ADD-25FB71C4DBBE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -21,6 +23,14 @@ Global
 		{A303C8C5-D572-445C-922D-191019579269}.Release|x64.Build.0 = Release|x64
 		{A303C8C5-D572-445C-922D-191019579269}.Release|x86.ActiveCfg = Release|Win32
 		{A303C8C5-D572-445C-922D-191019579269}.Release|x86.Build.0 = Release|Win32
+		{157CD4B2-98C7-440D-9ADD-25FB71C4DBBE}.Debug|x64.ActiveCfg = Debug|x64
+		{157CD4B2-98C7-440D-9ADD-25FB71C4DBBE}.Debug|x64.Build.0 = Debug|x64
+		{157CD4B2-98C7-440D-9ADD-25FB71C4DBBE}.Debug|x86.ActiveCfg = Debug|Win32
+		{157CD4B2-98C7-440D-9ADD-25FB71C4DBBE}.Debug|x86.Build.0 = Debug|Win32
+		{157CD4B2-98C7-440D-9ADD-25FB71C4DBBE}.Release|x64.ActiveCfg = Release|x64
+		{157CD4B2-98C7-440D-9ADD-25FB71C4DBBE}.Release|x64.Build.0 = Release|x64
+		{157CD4B2-98C7-440D-9ADD-25FB71C4DBBE}.Release|x86.ActiveCfg = Release|Win32
+		{157CD4B2-98C7-440D-9ADD-25FB71C4DBBE}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
