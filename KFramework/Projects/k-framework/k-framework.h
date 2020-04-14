@@ -47,8 +47,41 @@ namespace kfw {
             ~HookManager();
         };
 
-        class HackManager {
+        class IBaseHack {
+        protected:
+            IBaseHack(std::string identifier, std::string hrIdentifier);
         public:
+            virtual ~IBaseHack() = default;
+
+            HackManager* manager;
+
+            std::string identifier;
+            std::string hrIdentifier; // Human-Readable Identifier
+
+            virtual void onRegister() = 0;
+            virtual void onUnregister() = 0;
+
+            virtual void onMainLoop() = 0;
+            virtual BOOL onRender3d() = 0;
+            virtual BOOL onRender2d() = 0;
+            virtual BOOL onShoot() = 0;
+        };
+
+        class HackManager final {
+            std::vector<IBaseHack*>* hacks;
+        public:
+            void registerHack(IBaseHack* hack) const;
+            void unregisterHack(const std::string& identifier) const;
+            IBaseHack* getHackByIdentifier(const std::string& identifier) const;
+            bool doesIdentifierExist(const std::string& identifier) const;
+
+            void onMainLoop() const;
+            BOOL onRender3d() const;
+            BOOL onRender2d() const;
+            BOOL onShoot() const;
+
+            HackManager();
+            ~HackManager();
         };
 
         class Logger {

@@ -147,6 +147,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Hacks.cpp" />
     <ClCompile Include="Hooking.cpp" />
     <ClCompile Include="k-framework.cpp" />
     <ClCompile Include="Logger.cpp" />
