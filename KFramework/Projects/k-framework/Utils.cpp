@@ -27,7 +27,7 @@ DWORD64 kfw::core::Utils::findPattern(const DWORD64 addrFrom, const DWORD64 addr
     const size_t patternLength = strlen(mask);
     if (patternLength == 0) return 0;
 
-    for (DWORD i = addrFrom; i < addrTo; i++)
+    for (DWORD64 i = addrFrom; i < addrTo; i++)
     {
         char* current = reinterpret_cast<char*>(i);
         bool patternFailed = false;
@@ -41,7 +41,7 @@ DWORD64 kfw::core::Utils::findPattern(const DWORD64 addrFrom, const DWORD64 addr
         }
         if (!patternFailed)
         {
-            return DWORD(i);
+            return DWORD64(i);
         }
     }
 

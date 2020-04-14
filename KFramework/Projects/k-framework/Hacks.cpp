@@ -17,8 +17,6 @@ kfw::core::HackManager::~HackManager() {
 }
 
 void kfw::core::HackManager::registerHack(IBaseHack* hack) const {
-    std::stringstream ss;
-
     if (doesIdentifierExist(hack->identifier))
     {
         return;
