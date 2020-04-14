@@ -52,13 +52,13 @@ bool kfw::core::HookData::hook()
 
 bool kfw::core::HookData::unhook()
 {
-    delete[] this->oldBytes;
     if (!bIsHooked) return false;
     DWORD oldProtection;
     VirtualProtect(this->vpToHook, patchSize, PAGE_EXECUTE_READWRITE, &oldProtection);
     memcpy(vpToHook, this->oldBytes, patchSize);
     DWORD temp;
     VirtualProtect(this->vpToHook, patchSize, oldProtection, &temp);
+    delete[] this->oldBytes;
     return true;
 }
 #pragma endregion
