@@ -59,11 +59,11 @@ int main()
     logger.log(sstr.str(), "PatternScan");
 
     // Factory test
-    if (kfw::core::Factory::getDefaultHookManager() != nullptr) {
+    if (kfw::core::Factory::getDefaultHookManager() == nullptr) {
         DebugBreak();
     }
 
-    if (kfw::core::Factory::getDefaultHackManager() != nullptr) {
+    if (kfw::core::Factory::getDefaultHackManager() == nullptr) {
         DebugBreak();
     }
 
