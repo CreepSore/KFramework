@@ -58,10 +58,7 @@ namespace kfw {
             IBaseHack* getHackByIdentifier(const std::string& identifier) const;
             bool doesIdentifierExist(const std::string& identifier) const;
 
-            void onMainLoop() const;
-            BOOL onRender3d() const;
-            BOOL onRender2d() const;
-            BOOL onShoot() const;
+            bool onEvent(std::string event, void* args) const;
 
             HackManager();
             ~HackManager();
@@ -81,10 +78,7 @@ namespace kfw {
             virtual void onRegister() = 0;
             virtual void onUnregister() = 0;
 
-            virtual void onMainLoop() = 0;
-            virtual BOOL onRender3d() = 0;
-            virtual BOOL onRender2d() = 0;
-            virtual BOOL onShoot() = 0;
+            virtual bool onEvent(std::string event, void* args) = 0;
         };
 
         class Logger {
@@ -122,6 +116,15 @@ namespace kfw {
 
             PatchInfo(DWORD64 address, const char* toWrite, const char* name);
             PatchInfo(const char* module, const char* pattern, const char* mask, const char* toWrite, const char* name);
+        };
+    
+        class Factory {
+            static HookManager * hookManager;
+            static HackManager * hackManager;
+        public:
+            static HookManager * getDefaultHookManager();
+            static HackManager * getDefaultHackManager();
+            static void cleanup();
         };
     }
 }

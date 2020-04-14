@@ -48,7 +48,7 @@ bool kfw::core::PatchInfo::patchAddress() {
 
     SIZE_T len = strlen(this->toWrite);
     this->oldBytes = new char[len];
-    for (int i = 0; i < len; i++)
+    for (size_t i = 0; i < len; i++)
     {
         PCHAR(this->oldBytes)[i] = PCHAR(this->address)[i];
     }
@@ -56,7 +56,7 @@ bool kfw::core::PatchInfo::patchAddress() {
     len = strlen(this->toWrite);
     DWORD oldProt = 0;
     VirtualProtect(LPVOID(this->address), len, PAGE_EXECUTE_READWRITE, &oldProt);
-    for (int i = 0; i < len; i++)
+    for (size_t i = 0; i < len; i++)
     {
         *PBYTE(this->address + i) = this->toWrite[i];
     }
@@ -102,7 +102,7 @@ bool kfw::core::PatchInfo::unpatch() {
     const SIZE_T len = strlen(this->toWrite);
     DWORD oldProt = 0;
     VirtualProtect(LPVOID(this->address), len, PAGE_EXECUTE_READWRITE, &oldProt);
-    for (int i = 0; i < len; i++)
+    for (size_t i = 0; i < len; i++)
     {
         PCHAR(this->address)[i] = this->oldBytes[i];
     }

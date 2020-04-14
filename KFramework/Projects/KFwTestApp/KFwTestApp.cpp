@@ -1,3 +1,4 @@
+#pragma warning(disable:4244)
 #include <iostream>
 #include <string>
 #include <sstream>
@@ -57,6 +58,16 @@ int main()
     sstr << "Test: 0x" << std::hex << addr << " = 0x" << std::hex << res;
     logger.log(sstr.str(), "PatternScan");
 
+    // Factory test
+    if (kfw::core::Factory::getDefaultHookManager() != nullptr) {
+        DebugBreak();
+    }
+
+    if (kfw::core::Factory::getDefaultHackManager() != nullptr) {
+        DebugBreak();
+    }
+
+    kfw::core::Factory::cleanup();
     std::cout << "Execution completed successfully";
 }
 

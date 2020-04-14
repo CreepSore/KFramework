@@ -56,44 +56,13 @@ bool kfw::core::HackManager::doesIdentifierExist(const std::string& identifier) 
     return getHackByIdentifier(identifier) != nullptr;
 }
 
-void kfw::core::HackManager::onMainLoop() const {
+bool kfw::core::HackManager::onEvent(std::string event, void* args) const {
+    bool result = false;
     for (IBaseHack* hack : *hacks)
     {
-        hack->onMainLoop();
-    }
-}
-
-BOOL kfw::core::HackManager::onRender3d() const {
-    BOOL result = 0;
-    for (IBaseHack* hack : *hacks)
-    {
-        if (hack->onRender3d())
+        if (hack->onEvent(event, args))
         {
-            result = 1;
-        }
-    }
-    return result;
-}
-
-BOOL kfw::core::HackManager::onRender2d() const {
-    BOOL result = 0;
-    for (IBaseHack* hack : *hacks)
-    {
-        if (hack->onRender2d())
-        {
-            result = 1;
-        }
-    }
-    return result;
-}
-
-BOOL kfw::core::HackManager::onShoot() const {
-    BOOL result = 0;
-    for (IBaseHack* hack : *hacks)
-    {
-        if (hack->onShoot())
-        {
-            result = 1;
+            result = true;
         }
     }
     return result;
