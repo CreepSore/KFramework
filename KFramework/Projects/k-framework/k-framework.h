@@ -2,19 +2,19 @@
 #include "Utils.h"
 
 namespace kfw {
-	class HookManager {
+    class HookManager {
 
-	};
+    };
 
-	class HackManager {
-	
-	};
+    class HackManager {
+    
+    };
 
-	class Logger {
-	
-	};
+    class Logger {
+    
+    };
 
-	class Utils {
-		static void setupConsole();
-	};
+    class Utils {
+        static void setupConsole();
+    };
 }
