@@ -2,6 +2,13 @@
 #include <Windows.h>
 #include <string>
 #include <vector>
+#include "json.hpp"
+
+#ifdef _WIN64
+typedef DWORD64 VDWORD;
+#else
+typedef DWORD VDWORD;
+#endif
 
 namespace kfw {
     namespace core {
@@ -26,7 +33,7 @@ namespace kfw {
 
             // Trampoline Stuff
             int patchSize = 0;
-            DWORD jmpToAddr = 0;
+            VDWORD jmpToAddr = 0;
             void* header;
             unsigned char * oldBytes;
 
@@ -66,8 +73,8 @@ namespace kfw {
 
         class IBaseHack {
         protected:
-            IBaseHack(std::string identifier, std::string hrIdentifier);
         public:
+            IBaseHack(std::string identifier, std::string hrIdentifier);
             virtual ~IBaseHack() = default;
 
             HackManager* manager;
@@ -125,6 +132,32 @@ namespace kfw {
             static HookManager * getDefaultHookManager();
             static HackManager * getDefaultHackManager();
             static void cleanup();
+        };
+
+        struct DatabridgePacket {
+            std::string id;
+            std::string type;
+            nlohmann::json data;
+            nlohmann::json toJsonObject();
+
+            DatabridgePacket();
+            DatabridgePacket(std::string type, nlohmann::json data);
+        };
+
+        class DatabridgeClient {
+        protected:
+            std::string recvBuffer;
+            SOCKET dbSocket;
+            SOCKADDR_IN addr;
+            bool reconnectAutomatically;
+            bool connected;
+        public:
+            DatabridgeClient(const std::string& ipAddress, int port);
+            ~DatabridgeClient();
+            bool establishConnection(bool reconnectAutomatically);
+            bool sendData(DatabridgePacket packet);
+            bool receivePacket(DatabridgePacket& packet);
+            void closeConnection();
         };
     }
 }

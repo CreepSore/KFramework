@@ -147,6 +147,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="DatabridgeClient.cpp" />
     <ClCompile Include="Factory.cpp" />
     <ClCompile Include="Hacks.cpp" />
     <ClCompile Include="Hooking.cpp" />
@@ -156,6 +157,7 @@
     <ClCompile Include="Utils.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="json.hpp" />
     <ClInclude Include="k-framework.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

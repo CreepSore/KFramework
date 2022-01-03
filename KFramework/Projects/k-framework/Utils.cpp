@@ -50,12 +50,12 @@ DWORD64 kfw::core::Utils::findPattern(const DWORD64 addrFrom, const DWORD64 addr
 
 DWORD64 kfw::core::Utils::findPattern(const HMODULE module, const char* pattern, const char* mask)
 {
-    DWORD from = DWORD(module);
-    DWORD to = DWORD(module);
+    DWORD64 from = DWORD64(module);
+    DWORD64 to = DWORD64(module);
     MEMORY_BASIC_INFORMATION meminfo = MEMORY_BASIC_INFORMATION();
 
     while (VirtualQuery(reinterpret_cast<LPCVOID>(to), &meminfo, sizeof(MEMORY_BASIC_INFORMATION))) {
-        if (DWORD(meminfo.AllocationBase) != from)
+        if (DWORD64(meminfo.AllocationBase) != from)
             break;
 
         to += meminfo.RegionSize;

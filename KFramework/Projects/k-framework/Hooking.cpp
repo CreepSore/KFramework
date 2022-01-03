@@ -7,10 +7,10 @@ kfw::core::HookData::HookData(void* toHook, void* hookedFunc, const size_t patch
     this->identifier = identifier;
     this->hrIdentifier = hrIdentifier;
     this->patchSize = patchSize;
-    oldBytes = new unsigned char[patchSize];
-    vpToHook = toHook;
-    vpHookedFunc = hookedFunc;
-    jmpToAddr = 0;
+    this->oldBytes = new unsigned char[patchSize];
+    this->vpToHook = toHook;
+    this->vpHookedFunc = hookedFunc;
+    this->jmpToAddr = 0;
 }
 
 kfw::core::HookData::~HookData()
@@ -31,20 +31,20 @@ bool kfw::core::HookData::hook()
     DWORD oldProtection;
     VirtualProtect(this->vpToHook, patchSize, PAGE_EXECUTE_READWRITE, &oldProtection);
 
-    const DWORD relAddress = (reinterpret_cast<DWORD>(this->vpHookedFunc) - reinterpret_cast<DWORD>(this->vpToHook)) - 5;
+    const VDWORD relAddress = (reinterpret_cast<VDWORD>(this->vpHookedFunc) - reinterpret_cast<VDWORD>(this->vpToHook)) - 5;
 
     *static_cast<BYTE*>(this->vpToHook) = 0xE9;
-    *reinterpret_cast<DWORD*>(reinterpret_cast<DWORD>(this->vpToHook) + 0x1) = relAddress;
-    memset(reinterpret_cast<void*>(reinterpret_cast<DWORD>(this->vpToHook) + 0x5), 0x90, patchSize - 5);
-    jmpToAddr = reinterpret_cast<DWORD>(this->vpToHook) + patchSize;
+    *reinterpret_cast<VDWORD*>(reinterpret_cast<VDWORD>(this->vpToHook) + 0x1) = relAddress;
+    memset(reinterpret_cast<void*>(reinterpret_cast<VDWORD>(this->vpToHook) + 0x5), 0x90, patchSize - 5);
+    jmpToAddr = reinterpret_cast<VDWORD>(this->vpToHook) + patchSize;
 
     DWORD temp;
     VirtualProtect(this->vpToHook, patchSize, oldProtection, &temp);
 
     header = VirtualAlloc(NULL, patchSize + 5, MEM_COMMIT, PAGE_EXECUTE_READWRITE);
     memcpy(header, this->oldBytes, patchSize);
-    memset(reinterpret_cast<void*>(reinterpret_cast<DWORD>(header) + patchSize), 0xE9, 1);
-    *reinterpret_cast<DWORD*>(reinterpret_cast<DWORD>(header) + patchSize + 1) = (reinterpret_cast<DWORD>(this->vpToHook) - (reinterpret_cast<DWORD>(header) + patchSize));
+    memset(reinterpret_cast<void*>(reinterpret_cast<VDWORD>(header) + patchSize), 0xE9, 1);
+    *reinterpret_cast<VDWORD*>(reinterpret_cast<VDWORD>(header) + patchSize + 1) = (reinterpret_cast<VDWORD>(this->vpToHook) - (reinterpret_cast<VDWORD>(header) + patchSize));
 
     this->bIsHooked = true;
     return true;
