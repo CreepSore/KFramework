@@ -126,11 +126,13 @@ namespace kfw {
         };
     
         class Factory {
-            static HookManager * hookManager;
-            static HackManager * hackManager;
+            static HookManager* hookManager;
+            static HackManager* hackManager;
+            static Logger* logger;
         public:
-            static HookManager * getDefaultHookManager();
-            static HackManager * getDefaultHackManager();
+            static HookManager* getDefaultHookManager();
+            static HackManager* getDefaultHackManager();
+            static Logger* getDefaultLogger();
             static void cleanup();
         };
 

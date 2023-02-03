@@ -28,12 +28,14 @@ bool kfw::core::DatabridgeClient::sendData(DatabridgePacket packet) {
     std::string toSend = packet.toJsonObject().dump();
     toSend.append("\n");
 
-    if (send(this->dbSocket, toSend.c_str(), toSend.length(), 0) != 0) {
-        if (this->reconnectAutomatically) {
-            this->establishConnection(this->reconnectAutomatically);
+    if (send(this->dbSocket, toSend.c_str(), toSend.length(), 0) == SOCKET_ERROR) {
+        if (WSAGetLastError() == WSAENOTCONN) {
+            if (this->reconnectAutomatically) {
+                this->establishConnection(this->reconnectAutomatically);
+            }
         }
         return false;
-    };
+    }
     return true;
 }
 
@@ -41,14 +43,49 @@ bool kfw::core::DatabridgeClient::receivePacket(DatabridgePacket& packet) {
     std::string received;
     char _recvBuffer[1024];
     int recvLen = 0;
+
+    pollfd* toPoll = new pollfd[] { 0 };
+    toPoll->fd = this->dbSocket;
+    toPoll->events = POLLIN;
+    toPoll->revents = POLLIN;
+    int pollres = WSAPoll(toPoll, 1, 0);
+
+    if (pollres == 0 || pollres == SOCKET_ERROR) {
+        return false;
+    }
+
+    if (toPoll->revents & POLLIN == 0) {
+        return false;
+    }
+
     while (recvLen = recv(this->dbSocket, _recvBuffer, 1024, 0)) {
+        if (recvLen == SOCKET_ERROR) {
+            int err = WSAGetLastError();
+            std::stringstream ss;
+            ss << "Socket Error: " << err;
+            Factory::getDefaultLogger()->log(ss.str(), "DatabridgeClient");
+            return false;
+        }
         received.append(_recvBuffer, recvLen);
+
+        pollfd* toPoll = new pollfd[]{ 0 };
+        toPoll->fd = this->dbSocket;
+        toPoll->revents = POLLIN;
+        pollres = WSAPoll(toPoll, 1, 0);
+
+        if (pollres == 0 || pollres == SOCKET_ERROR) {
+            break;
+        }
+
+        if (toPoll->revents & POLLIN == 0) {
+            break;
+        }
     }
 
     int pos = received.find("\n");
     if (pos != std::string::npos) {
-        std::string split = this->recvBuffer.substr(0, pos);
-        this->recvBuffer = this->recvBuffer.substr(pos);
+        std::string split = received.substr(0, pos);
+        received = received.substr(pos);
         nlohmann::json parsedPacket = nlohmann::json::parse(split);
 
         packet.id = parsedPacket.value("id", "0");
