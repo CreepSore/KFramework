@@ -46,6 +46,12 @@ bool kfw::core::HookData::hook()
     memset(reinterpret_cast<void*>(reinterpret_cast<VDWORD>(header) + patchSize), 0xE9, 1);
     *reinterpret_cast<VDWORD*>(reinterpret_cast<VDWORD>(header) + patchSize + 1) = (reinterpret_cast<VDWORD>(this->vpToHook) - (reinterpret_cast<VDWORD>(header) + patchSize));
 
+    this->origFunction = VirtualAlloc(NULL, patchSize + 5, MEM_COMMIT, PAGE_EXECUTE_READWRITE);
+    memcpy(this->origFunction, this->oldBytes, patchSize);
+    const VDWORD relAddressOrig = (reinterpret_cast<VDWORD>(this->vpToHook) - reinterpret_cast<VDWORD>(this->origFunction)) - patchSize;
+    *reinterpret_cast<BYTE*>(reinterpret_cast<VDWORD>(this->origFunction) + patchSize) = 0xE9;
+    *reinterpret_cast<VDWORD*>(reinterpret_cast<VDWORD>(this->origFunction) + patchSize + 0x1) = relAddressOrig;
+
     this->bIsHooked = true;
     return true;
 }

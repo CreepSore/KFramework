@@ -30,6 +30,7 @@ namespace kfw {
 
             void* vpToHook = nullptr;
             void* vpHookedFunc = nullptr;
+            void* origFunction = nullptr;
 
             // Trampoline Stuff
             int patchSize = 0;
