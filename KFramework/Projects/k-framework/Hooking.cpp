@@ -18,6 +18,7 @@ kfw::core::HookData::HookData(void* toHook, void* hookedFunc, const size_t patch
 kfw::core::HookData::~HookData()
 {
     this->unhook();
+    delete[] this->oldBytes;
 }
 
 void kfw::core::HookData::setupHook()
@@ -76,7 +77,6 @@ bool kfw::core::HookData::unhook()
     memcpy(vpToHook, this->oldBytes, patchSize);
 
     VirtualProtect(this->vpToHook, patchSize, oldProtection, &oldProtection);
-    delete[] this->oldBytes;
 
     VirtualFree(this->origFunction, this->patchSize + 5, MEM_RELEASE);
     VirtualFree(this->header, this->patchSize + 5, MEM_RELEASE);
