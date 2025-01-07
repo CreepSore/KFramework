@@ -1,3 +1,5 @@
+#include <iostream>
+
 #include "k-framework.h"
 
 #pragma region HookData
@@ -31,7 +33,7 @@ bool kfw::core::HookData::hook()
     DWORD oldProtection;
     VirtualProtect(this->vpToHook, patchSize, PAGE_EXECUTE_READWRITE, &oldProtection);
 
-    const VDWORD relAddress = (reinterpret_cast<VDWORD>(this->vpHookedFunc) - reinterpret_cast<VDWORD>(this->vpToHook)) - 5;
+    const VDWORD relAddress = reinterpret_cast<VDWORD>(this->vpHookedFunc) - reinterpret_cast<VDWORD>(this->vpToHook) - 5;
 
     *static_cast<BYTE*>(this->vpToHook) = 0xE9;
     *reinterpret_cast<VDWORD*>(reinterpret_cast<VDWORD>(this->vpToHook) + 0x1) = relAddress;
@@ -48,6 +50,18 @@ bool kfw::core::HookData::hook()
 
     this->origFunction = VirtualAlloc(NULL, patchSize + 5, MEM_COMMIT, PAGE_EXECUTE_READWRITE);
     memcpy(this->origFunction, this->oldBytes, patchSize);
+
+    if(((BYTE*)this->origFunction)[0] == 0xE9)
+    {
+        DWORD* jmpAddr = reinterpret_cast<DWORD*>(reinterpret_cast<DWORD>(this->origFunction) + 1);
+        DWORD originalTarget = reinterpret_cast<DWORD>(this->vpToHook) + *jmpAddr;
+        DWORD newTarget = originalTarget - reinterpret_cast<VDWORD>(this->origFunction);
+        std::cout << std::hex << jmpAddr << '\n';
+        std::cout << std::hex << originalTarget << '\n';
+        std::cout << std::hex << newTarget << '\n';
+        *jmpAddr = newTarget;
+    }
+
     const VDWORD relAddressOrig = (reinterpret_cast<VDWORD>(this->vpToHook) - reinterpret_cast<VDWORD>(this->origFunction)) - patchSize;
     *reinterpret_cast<BYTE*>(reinterpret_cast<VDWORD>(this->origFunction) + patchSize) = 0xE9;
     *reinterpret_cast<VDWORD*>(reinterpret_cast<VDWORD>(this->origFunction) + patchSize + 0x1) = relAddressOrig;
