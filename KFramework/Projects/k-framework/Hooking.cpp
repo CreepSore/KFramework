@@ -56,9 +56,6 @@ bool kfw::core::HookData::hook()
         DWORD* jmpAddr = reinterpret_cast<DWORD*>(reinterpret_cast<DWORD>(this->origFunction) + 1);
         DWORD originalTarget = reinterpret_cast<DWORD>(this->vpToHook) + *jmpAddr;
         DWORD newTarget = originalTarget - reinterpret_cast<VDWORD>(this->origFunction);
-        std::cout << std::hex << jmpAddr << '\n';
-        std::cout << std::hex << originalTarget << '\n';
-        std::cout << std::hex << newTarget << '\n';
         *jmpAddr = newTarget;
     }
 
@@ -73,6 +70,7 @@ bool kfw::core::HookData::hook()
 bool kfw::core::HookData::unhook()
 {
     if (!bIsHooked) return false;
+
     DWORD oldProtection;
     VirtualProtect(this->vpToHook, patchSize, PAGE_EXECUTE_READWRITE, &oldProtection);
     memcpy(vpToHook, this->oldBytes, patchSize);
@@ -83,6 +81,8 @@ bool kfw::core::HookData::unhook()
     VirtualFree(this->origFunction, this->patchSize + 5, MEM_RELEASE);
     VirtualFree(this->header, this->patchSize + 5, MEM_RELEASE);
     VirtualFree(this->origFunction, this->patchSize + 5, MEM_RELEASE);
+
+    bIsHooked = false;
 
     return true;
 }
