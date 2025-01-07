@@ -62,9 +62,14 @@ bool kfw::core::HookData::unhook()
     DWORD oldProtection;
     VirtualProtect(this->vpToHook, patchSize, PAGE_EXECUTE_READWRITE, &oldProtection);
     memcpy(vpToHook, this->oldBytes, patchSize);
-    DWORD temp;
-    VirtualProtect(this->vpToHook, patchSize, oldProtection, &temp);
+
+    VirtualProtect(this->vpToHook, patchSize, oldProtection, &oldProtection);
     delete[] this->oldBytes;
+
+    VirtualFree(this->origFunction, this->patchSize + 5, MEM_RELEASE);
+    VirtualFree(this->header, this->patchSize + 5, MEM_RELEASE);
+    VirtualFree(this->origFunction, this->patchSize + 5, MEM_RELEASE);
+
     return true;
 }
 #pragma endregion

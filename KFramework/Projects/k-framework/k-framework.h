@@ -44,8 +44,8 @@ namespace kfw {
         };
 
         class HookManager {
-            std::vector<HookData*>* hooks;
         public:
+            std::vector<HookData*>* hooks;
             void registerHook(HookData* hook) const;
             void unregisterHook(const std::string& identifier) const;
             HookData* getHookByIdentifier(const std::string& identifier) const;
@@ -59,8 +59,8 @@ namespace kfw {
         };
 
         class HackManager final {
-            std::vector<IBaseHack*>* hacks;
         public:
+            std::vector<IBaseHack*>* hacks;
             void registerHack(IBaseHack* hack) const;
             void unregisterHack(const std::string& identifier) const;
             IBaseHack* getHackByIdentifier(const std::string& identifier) const;
