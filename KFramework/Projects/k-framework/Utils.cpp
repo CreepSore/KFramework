@@ -1,6 +1,5 @@
 #include <Windows.h>
 #include <stdio.h>
-#include <iostream>
 #include "k-framework.h"
 
 bool kfw::core::Utils::setupConsole()

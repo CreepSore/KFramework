@@ -54,7 +54,7 @@ bool kfw::core::DatabridgeClient::receivePacket(DatabridgePacket& packet) {
         return false;
     }
 
-    if (toPoll->revents & POLLIN == 0) {
+    if ((toPoll->revents & POLLIN) == 0) {
         return false;
     }
 
@@ -77,7 +77,7 @@ bool kfw::core::DatabridgeClient::receivePacket(DatabridgePacket& packet) {
             break;
         }
 
-        if (toPoll->revents & POLLIN == 0) {
+        if ((toPoll->revents & POLLIN) == 0) {
             break;
         }
     }

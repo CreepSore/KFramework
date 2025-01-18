@@ -95,6 +95,7 @@ kfw::core::HookManager::HookManager() {
 
 kfw::core::HookManager::~HookManager() {
     this->unhookAll();
+    delete hooks;
 }
 
 void kfw::core::HookManager::registerHook(kfw::core::HookData* hook) const {
